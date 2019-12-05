@@ -1,0 +1,148 @@
+<HTML>
+<HEAD>
+<TITLE>未编采购计划的需求计划一览表</TITLE>
+<META http-equiv=Content-Language content=zh-cn>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META content="MSHTML 6.00.2900.5626" name=GENERATOR>
+<META content=FrontPage.Editor.Document name=ProgId>
+<LINK href="css/style.css" rel=stylesheet>
+<script src="jquery-easyui-1.6.3/jquery.min.js" charset="utf-8"></script>
+<!-- easyui依赖的js -->
+<script src="jquery-easyui-1.6.3/jquery.easyui.min.js" charset="utf-8"></script>
+<!--引用对应的语言包 -->
+<script src="jquery-easyui-1.6.3/locale/easyui-lang-zh_CN.js"
+	charset="utf-8"></script>
+<!-- 引用图标样式 -->
+<link rel="stylesheet" href="jquery-easyui-1.6.3/themes/icon.css">
+<!-- 引用默认的样式 -->
+<link rel="stylesheet"
+	href="jquery-easyui-1.6.3/themes/default/easyui.css">
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css"
+	href="DataTables-1.10.15/media/css/jquery.dataTables.css">
+	<script type="text/javascript">
+	$(function() {
+		//第一个
+		$("#table1").datagrid({
+			title : '未编采购计划的需求计划一览表',
+			toolbar: [{
+				text:'编制采购计划',
+				iconCls: 'icon-edit',
+				handler: function(){
+					//获取选中行
+					var rows = $("#table1").datagrid("getChecked");
+					if(rows.length==0){
+						alert("您还没选择！");
+					}else{
+						var i=0;
+						var arrs=new Array();
+						$(rows).each(function(index,data){
+							arrs[i]=data.materialName;
+							i++;	
+						 });
+
+						 $.ajax({
+							    url:'/detection',
+							    type:'post',
+							    data:{
+							    	id:arrs
+							    },
+							    success:function(one){
+							    	if(one=="检验成功"){
+							    		var i=0;
+										var arrs=new Array();
+										$(rows).each(function(index,data){
+											arrs[i]=data.id;
+											i++;	
+										 });
+							    		$(location).attr('href', '/ToGo?arrs='+arrs);
+							    	}else{
+							    		alert(one);
+							    	}
+							    }
+							})
+
+
+						//重新加载数据表格
+						$("#table1").datagrid("reload");
+						
+					}
+					
+				}
+			}, 
+			]
+			,
+			columns : [ [ {
+				title : '选择',
+				width : 100,
+				field : 'cz',
+				checkbox : true
+			}, {
+				title : '序号',
+				field : 'id',
+				width : 280,
+				height : 20,
+				align : 'center'
+			}, {
+				title : '物资编码',
+				field : 'materialCode',
+				width : 280,
+				height : 20,
+				align : 'center'
+			}, {
+				title : '物资名称',
+				field : 'materialName',
+				width : 280,
+				height : 20,
+				align : 'center'
+			}, {
+				title : '数量',
+				field : 'amount',
+				width : 290,
+				height : 20,
+				align : 'center'
+			},  {
+				title : '预算价格',
+				field : 'unitPrice',
+				width : 290,
+				height : 20,
+				align : 'center'
+			}
+			] ],
+			url : '/wbxjfa',
+			method : 'get',
+			pagination:true,//分页工具
+		     pageSize:5,//页面显示几条
+			 pageNumber:1,//显示第一页
+			 pageList:[5,10,15],//显示条数
+			onSelect : function(index, row) {
+			
+			}
+
+		});
+	});
+	</script>
+</HEAD>
+<BODY>
+	<CENTER>
+<H2><FONT color=#0070c0>未编采购计划的需求一览表</FONT></H2>
+				<CENTER>
+					<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0
+						width="100%" bgColor=#336699 borderColorLight=#006699 border=0>
+						<TBODY>
+							<TR>
+								<TD>
+									<TABLE id="table1" cellSpacing=1 cellPadding=3 width="100%"
+										border=0 align="center">
+										<TR class=t1 align="center">
+									
+									</TABLE>
+								</TD>
+							</TR>
+					</TABLE>
+					
+			</FORM>
+	</CENTER>
+	</CENTER>
+</BODY>
+</HTML>

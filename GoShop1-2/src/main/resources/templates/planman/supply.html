@@ -1,0 +1,77 @@
+<html>
+<link rel="stylesheet" href="css/style.css">
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<head>
+<title>临时供应商注册</title>
+<script language=javascript>  
+function subback()
+	{  
+	 
+	  form.but.value ="add"; 
+	  CheckAll();
+	}  
+</script>
+</head>
+<body>
+<center>
+<form name=form action="supply2.html"  method="post">
+<input type="hidden" name="p_Enquireno" value="100020101348014">
+<input type=hidden name=but value="ture">
+
+<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0     width="100%"  bgColor=#336699 borderColorLight=#006699 border=1>
+<tr>
+<td>
+<table cellpadding="3" cellspacing="1" border="1" width="100%">
+<tr bgcolor="#ffffff"> 
+<td width="100%" colspan="20" bgcolor="#ffffff" align=center height=22><B><H2><font  color=#0070C0 >临时供应商注册</td>
+</tr>
+   
+<tr>
+		<td class=t1 nowrap >供应商名称</td><td class=t2><INPUT maxLength=50 name="company" style="HEIGHT: 22px; WIDTH: 161px"  Chk=1 alt="请输入供应商名称！" >**</td>
+		<td class=t1 nowrap>供应商简称</td><td class=t2><input name="companies" style="HEIGHT: 22px; WIDTH: 161px"  Chk=1 alt="请输入供应商简称！">**</td>
+</tr>
+<tr>
+	     <td class=t1 nowrap>法人代表</td><td class=t2><INPUT maxLength=10 name="corporation" style="HEIGHT: 22px; WIDTH: 161px" Chk=1 alt="请输入法人代表！">**</td>
+		 <td class=t1 nowrap>供应商证书编号</td><td class=t2><INPUT maxLength=50 name="certificate" style="HEIGHT: 22px; WIDTH: 161px"></td> 
+</tr>
+<tr>                           
+		<td class=t1 nowrap>地&nbsp;&nbsp;&nbsp;&nbsp;址</td><td class=t2><input maxLength="50" name="address" style="HEIGHT: 22px; WIDTH: 161px"  Chk=1 alt="请输入地址！" >**</td>
+		<td class=t1 nowrap>邮&nbsp;&nbsp;&nbsp;&nbsp;编</td><td class=t2><input maxLength="6" name="zip" style="HEIGHT: 22px; WIDTH: 161px"></td>
+</tr>
+<tr>
+		<td class=t1 nowrap>注册资金</td><td class=t2><input maxLength="10" name="regFund"  style="HEIGHT: 22px; WIDTH: 161px">(元)</td>
+		<td class=t1 nowrap>联&nbsp;系&nbsp;人</td><td class=t2><input maxLength="10" name="contact" style="HEIGHT: 22px; WIDTH: 161px"></td>
+</tr>
+<tr>
+		<td class=t1 nowrap>电&nbsp;&nbsp;&nbsp;&nbsp;话</td><td class=t2><input maxLength="15" name="phone" style="HEIGHT: 22px; WIDTH: 161px" ></td>
+		<td class=t1 nowrap>传&nbsp;&nbsp;&nbsp;&nbsp;真</td><td class=t2><input maxLength="15" name="fax" style="HEIGHT: 22px; WIDTH: 161px" ></td>
+</tr>
+<tr>
+		<td class=t1 nowrap>电子邮箱</td><td class=t2><input maxLength="40" name="email" style="HEIGHT: 22px; WIDTH: 161px" ></td>
+		<td class=t1 nowrap>网站地址</td><td class=t2><input maxLength="40" name="url" style="HEIGHT: 22px; WIDTH: 161px"></td>
+</tr>
+<tr>
+		<td class=t1 nowrap>公司性质</td><td class=t2><select name="kind" style="HEIGHT: 22px; WIDTH: 161px">
+</select></td>
+		<td class=t1 nowrap>认证状况</td><td class=t2><input maxLength="30" name="status" style="HEIGHT: 22px; WIDTH: 161px"></td>
+</tr>
+<tr>
+		<td class=t1 nowrap>开户银行</td><td class=t2><input name="depositBank" style="HEIGHT: 22px; WIDTH: 161px" ></td>
+		<td class=t1 nowrap>帐&nbsp;&nbsp;&nbsp;&nbsp;号</td><td class=t2><input maxLength="20" name="bankNumber" style="HEIGHT: 22px; WIDTH: 161px" ></td>
+</tr>
+<tr>
+		<td class=t1 nowrap>税&nbsp;&nbsp;&nbsp;&nbsp;号</td><td class=t2><input maxLength="20" name="strTax" style="HEIGHT: 22px; WIDTH: 161px" ></td>
+		<td class=t1 nowrap>银行信誉等级证书 </td><td class=t2><input maxLength="20" name="bankNumber" style="HEIGHT: 22px; WIDTH: 161px"></td>
+</tr>
+
+</table></td></tr></table>
+	
+		<p align=center>
+		<!-- <INPUT type=button value="保存/填写注册信息" onClick="subback()" id=button1 name=button1> -->
+		<INPUT type=button value="保存/填写注册信息" onClick="subback()" id=button1 name=button1> 
+		<INPUT type=button value="清 除" onClick="form.reset()" id=button1 name=button1> 
+		<INPUT type=reset value="返 回" onClick="history.back()" id=reset1 name=reset1>
+		</P>
+</form>
+</body>
+</html>

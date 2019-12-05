@@ -1,0 +1,341 @@
+<HTML xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+<TITLE>选择物资</TITLE>
+<META http-equiv=Content-Language content=zh-cn>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META content="MSHTML 6.00.2900.5626" name=GENERATOR>
+<META content=FrontPage.Editor.Document name=ProgId>
+<LINK href="css/style.css" rel=stylesheet>
+<script src="jquery-easyui-1.6.3/jquery.min.js" charset="utf-8"></script>
+<!-- easyui依赖的js -->
+<script src="jquery-easyui-1.6.3/jquery.easyui.min.js" charset="utf-8"></script>
+<!--引用对应的语言包 -->
+<script src="jquery-easyui-1.6.3/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+<!-- 引用图标样式 -->
+<link rel="stylesheet" href="jquery-easyui-1.6.3/themes/icon.css">
+<!-- 引用默认的样式 -->
+<link rel="stylesheet" href="jquery-easyui-1.6.3/themes/default/easyui.css">
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="DataTables-1.10.15/media/css/jquery.dataTables.css">
+<script>
+	//通过js创建easyui控件 通过url属性 远程加载内容
+	$(function(){ 
+		
+		//初始化数据表格
+		$("#jj").datagrid({
+			title:'物资类别',
+			toolbar: [{
+				text:'选择物资',
+				iconCls: 'icon-add',
+				handler: function(){
+					//获取选中行
+					var rows = $("#jj").datagrid("getChecked");
+					if(rows==""||rows==null){
+						alert("您还没选择！");
+					}
+					$(rows).each(function(index,data){
+
+				
+						$.ajax({
+						    url:'/sel',
+						    type:'post',
+						    data:{
+						    	id:data.typeNum
+						    },
+						    success:function(one){
+						    	var arr=one.replies;
+
+						    	for(var i=0;i<one.replies.length;i++){
+						    		var id=arr[i].id;
+				                    var materialNum=arr[i].materialNum;
+				                    var materialName=arr[i].materialName;
+						    		
+				      
+				                    $('#table1').datagrid('appendRow',{
+				                    	id: id,
+			                    		materialNum: materialNum,
+			                    		materialName:materialName
+				                    });
+
+
+
+						    	
+						    	}
+						    	
+						    }
+						})
+					});
+					//重新加载数据表格
+					$("#jj").datagrid("reload");
+				}
+			},'-',{ 
+	            text: '具体产品名称：<input type="text" id="username"/>' 
+	        },{ 
+				iconCls: 'icon-search',
+				text:'查询',
+				handler: function(){
+					 var test=$('#username').val();
+					if(test!=""){
+						$('#jj').datagrid('load',{
+							className: $("#className").combobox('getText'),
+				            productid: $('#username').val()
+				        
+				        });
+						
+					}
+				
+					
+				}
+	        }, 
+			]
+			,
+			 columns:[
+				 [
+					 {
+						 title:'选择',
+						 width:100,
+						 field:'cz',
+						 checkbox:true
+					 },
+					 {
+						 title:'类型编号',
+						 field:'typeNum',
+						 width:490,
+						 height:20,
+						 align:'center'
+					 },
+					 {
+						 title:'类型名称',
+						 field:'typeName',
+						 width:490,
+						 height:20,
+						 align:'center'
+					 },
+					 {
+						 title:'产品类型',
+						 field:'typeUnit',
+						 width:490,
+						 height:20,
+						 align:'center'
+					 }
+					
+				 ]
+			 ],
+			 url:'/findAll',
+			 method:'get',
+			 pagination:true,//分页工具
+			 pageSize:3,//页面显示几条
+			 pageNumber:1,//显示第一页
+			 pageList:[3,6,9],//显示条数
+			 fitColumns:false,
+			 onDblClickRow:function(index,row){
+
+				
+			 }
+		 });
+			
+		$('#DIV_toolbar').appendTo('.datagrid-toolbar');
+		
+		$('#className').combobox({    
+			onChange:function (n,o) {
+				$('#username').val(null);
+				var cit=$("#className").combobox('getText');
+				 $('#jj').datagrid('load',{
+			            className:cit
+			        
+			        });
+			}
+		});  
+		
+		//第一个
+		$("#table1").datagrid({
+			title:'物资需求',
+			toolbar: [{
+				text:'取消物资',
+				iconCls: 'icon-cancel',
+				handler: function(){
+					var deletedData = $('#table1').datagrid('getChecked');
+					if(deletedData.length==0){
+						alert("请选择要取消的物资！");
+						
+					}else{
+						for (var i = deletedData.length - 1; i >= 0; i--) {
+							  var rowIndex = $('#table1').datagrid('getRowIndex', deletedData[i]);
+							  $('#table1').datagrid('deleteRow', rowIndex);
+							}
+					}
+					
+					
+					//重新加载数据表格
+					$("#table1").datagrid("reload");
+				}
+			},
+			]
+			,
+			 columns:[
+				 [
+					 {
+						 title:'选择',
+						 width:100,
+						 field:'cz',
+						 checkbox:true
+					 },
+					 {
+						 title:'序号',
+						 field:'id',
+						 width:490,
+						 height:20,
+						 align:'center'
+					 },
+					 {
+						 title:'产品编码',
+						 field:'materialNum',
+						 width:490,
+						 height:20,
+						 align:'center'
+					 },
+					 {
+						 title:'产品名称',
+						 field:'materialName',
+						 width:490,
+						 height:20,
+						 align:'center'
+					 }
+					
+				 ]
+			 ],striped:true
+		 });
+
+	});
+
+	
+</script>
+<script type="text/javascript">
+ function GetID(){
+	
+	//获取选中行
+	var rows = $("#table1").datagrid("getChecked");
+	if(rows==null||rows==""){
+		alert("您还没有选择物资呢！")
+	}
+	var i=0;
+	var arrs=new Array();
+	$(rows).each(function(index,data){
+		arrs[i]=data.id;
+		i++;
+		
+		
+	 });
+	$.ajax({
+	    url:'/togo',
+	    type:'post',
+	    data:{
+	    	arr:arrs
+	    },
+	    success:function(one){
+	    	window.parent.main.location=one;
+	    }
+	})
+		
+}
+
+
+</script>
+<SCRIPT language=JAVASCRIPT>
+	function delCheckbox() {
+		var objCheckbox = document.getElementsByName("p_orderno");
+		var count = 0;
+		for (var i = 0; i < objCheckbox.length; i++) {
+			if (objCheckbox[i].checked) {
+				count++;
+				var obj = document.getElementById("table1");
+				obj.deleteRow(i + 1);
+			}
+		}
+		if (count == 0) {
+			alert("请选择一条要删除的数据。");
+		}
+	}
+
+	function productX() {
+		window
+				.open(
+						"wangyeduihakuang.htm",
+						"Canny1",
+						"toolbar=0,location=0,status=0,menubar=0,scrollbars=0,width=600,height=440,left=100,top=60");
+
+	}
+</SCRIPT>
+
+
+<FORM name=form action=Order_newform.asp method=post
+	encType=multipart/form-data>
+</HEAD>
+<BODY>
+
+	<CENTER>
+		<TABLE width="90%" align=center border=0>
+			<TBODY>
+				<TR>
+					<TD align=middle><FONT color=red>选择物资</FONT>====&gt;录入需求计划====&gt;需求计划确认</TD>
+				</TR>
+			</TBODY>
+		</TABLE>
+		<TABLE cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff
+			borderColorLight=#ffffff border=0>
+			<TBODY>
+				<tr>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div>
+							<TABLE  style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0
+								width="100%" bgColor=#336699 borderColorLight=#006699 border=0>
+								<tr>
+									<td>
+										<table cellpadding="3" cellspacing="1" border="1" width="100%"
+											id="table1" style="text-align: center;height: 400px;" >
+
+											<center>
+												<form name=form action="Order_wtb_do.asp" method="post">
+																							
+										</table>
+									</td>
+								</tr>
+							</table>
+							<div align="center">
+								请先选择物资，然后点击：<A
+								th:onclick="GetID()"><FONT
+									size=3><U>下一步</U>
+							</div>
+							</form>
+
+						</div>
+					</td>
+				</tr>
+				<TR>
+					<TD>
+		
+						<TABLE id="jj" cellSpacing=1 cellPadding=3 width="100%" border=0>
+									<div id="DIV_toolbar" Style="margin:0px; padding:5px">
+		具体产品类型：
+		   <input type="text" id="className" class="easyui-combobox" name="className" 
+		   panelHeight="100"
+ data-options="valueField:'classid',textField:'className',url:'/loadCategory',prompt: '请选择',required:true,editable:false" />
+	
+	</div>
+					</TABLE>
+
+					</TD>
+					
+				</TR>
+				
+
+			</TBODY>
+		</TABLE>
+		</FORM>
+	</CENTER>
+</BODY>
+</HTML>

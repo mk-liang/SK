@@ -1,0 +1,54 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<HTML  xmlns:th="http://www.thymeleaf.org"><HEAD><TITLE>需求计划明细</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<LINK href="css/style.css" rel=stylesheet>
+<META content="MSHTML 6.00.2900.5626" name=GENERATOR></HEAD>
+<BODY >
+<TABLE cellSpacing=1 cellPadding=3 width="100%" border=1 th:object="${order}">
+        <TBODY>
+        <TR bgColor=#ffffff>
+          <TD align=middle width="100%" bgColor=#ffffff colSpan=20 
+            height=22><B>
+            <H2><FONT color=#0070c0>需求计划1</B>
+</FONT></H2></TD></TR>
+        <TR class=t1>
+          <TD noWrap width="20%">需求计划编号</TD>
+          <TD class=t2 noWrap th:text="*{orderNum}" ></TD>
+          <TD noWrap>产品编码</TD>
+          <TD class=t2 noWrap th:text="*{materialCode}"></TD>
+        </TR>
+        <TR class=t1>
+          <TD noWrap width="20%" >产品名称</TD>
+          <TD class=t2 noWrap  th:text="*{materialName}"></TD>
+          <TD noWrap>数量</TD>
+          <TD class=t2 noWrap  th:text="*{amount}"></TD>
+        </TR>
+        <TR class=t1>
+          <TD noWrap>计量单位</TD>
+          <TD class=t2 noWrap  th:text="*{measureUnit}"></TD>
+          <TD noWrap>预算单价(元)</TD>
+          <TD class=t2 noWrap  th:text="*{unitPrice}"></TD>
+        </TR>
+        <TR class=t1>
+          <TD noWrap>交货期</TD>
+          <TD class=t2 noWrap  th:text="*{endDate}"></TD>
+          <TD noWrap>业务员</TD>
+          <TD class=t2 noWrap th:text="${em.empName}"></TD>
+        </TR>
+        
+        <TR class=t1>
+          <TD noWrap>电子邮件</TD>
+          <TD class=t2 noWrap th:text="${em.email}"></TD>
+          <TD noWrap width="20%">联系电话</TD>
+          <TD class=t2 noWrap th:text="${em.phone}"></TD></TR>
+        <TR class=t1>
+          <TD noWrap width="20%">联系传真</TD>
+          <TD class=t2 noWrap th:text="${em.fax}"></TD>
+          <TD noWrap width="20%">备注</TD>
+          <TD class=t2 noWrap >&nbsp;</TD></TR>
+        <tr>
+        <td clospan="5"><a href="JavaScript:history.go(-1)">返回上一级</a></td>
+        </tr>
+       </TBODY></TABLE>
+
+</BODY></HTML>

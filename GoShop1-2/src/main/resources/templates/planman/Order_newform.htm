@@ -1,0 +1,370 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="zh-cn">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<LINK href="css/style.css" rel=stylesheet>
+<script src="jquery-easyui-1.6.3/jquery.min.js" charset="utf-8"></script>
+<!-- easyui依赖的js -->
+<script src="jquery-easyui-1.6.3/jquery.easyui.min.js" charset="utf-8"></script>
+<!--引用对应的语言包 -->
+<script src="jquery-easyui-1.6.3/locale/easyui-lang-zh_CN.js"
+	charset="utf-8"></script>
+<!-- 引用图标样式 -->
+<link rel="stylesheet" href="jquery-easyui-1.6.3/themes/icon.css">
+<!-- 引用默认的样式 -->
+<link rel="stylesheet"
+	href="jquery-easyui-1.6.3/themes/default/easyui.css">
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css"
+	href="DataTables-1.10.15/media/css/jquery.dataTables.css">
+<script>
+	//通过js创建easyui控件 通过url属性 远程加载内容
+	$(function() {
+		//第一个
+		$("#table1").datagrid({
+			title : '录入需求计划',
+			columns : [ [ {
+				title : '选择',
+				width : 100,
+				field : 'cz',
+				checkbox : true
+			}, {
+				title : '序号',
+				field : 'id',
+				width : 300,
+				height : 20,
+				align : 'center'
+			}, {
+				title : '产品编码',
+				field : 'materialNum',
+				width : 300,
+				height : 20,
+				align : 'center'
+			}, {
+				title : '产品名称',
+				field : 'materialName',
+				width : 300,
+				height : 20,
+				align : 'center'
+			}, {
+				title : '计量单位',
+				field : 'materialUnit',
+				width : 300,
+				height : 20,
+				align : 'center'
+			}, {
+				title : '状态',
+				field : 'materialstart',
+				width : 280,
+				height : 20,
+				align : 'center',
+				formatter : function(value, row, index) {
+					var succy = $("#succy").val();
+
+					if (succy == 1) {
+						return '未完成';
+					} else {
+						return '完成';
+					}
+
+				}
+
+			}
+
+			] ],
+			striped : true,
+			singleSelect : true,
+			url : '/findMM',
+			method : 'get',
+			onSelect : function(index, row) {
+				$("#dd").val("");
+				$("#jj").val("");
+				$("#hh").val("");
+				$("#kk").val("");
+				var selRow = $('#table1').datagrid('getSelected');
+				$.ajax({
+					url : '/findmater',
+					type : 'get',
+					data : {
+						id : selRow.id
+					},
+					success : function(one) {
+						if (one.id == selRow.id) {
+							$('#tb1').datagrid('load', {
+
+							});
+						}
+					}
+				})
+			}
+
+		});
+
+		//第一个
+		$("#tb1")
+				.datagrid(
+						{
+							title : '物资详情展示',
+							toolbar : [
+									{
+										text : '重新选择物资',
+										iconCls : 'icon-undo',
+										handler : function() {
+											window.parent.main.location = "/stu";
+										}
+									},
+									'-',
+									{
+										text : '保存',
+										iconCls : 'icon-save',
+										handler : function() {
+											//前段ajax数据传入后台
+											var rows = $('#tb1').datagrid(
+													"getRows");
+											var num = $("#hh").val();
+											var time = $("#dd").val();
+											var money = $("#jj").val();
+											if (rows.length > 0 && num != ""
+													&& time != ""
+													&& money != "") {
+												$('#tb1').datagrid('selectRow',
+														0);//grid加载完成后自动选中第一行
+												var row = $('#tb1').datagrid(
+														"getSelections");//获取选中的数据  
+												$
+														.ajax({
+															url : '/add',
+															type : 'get',
+															data : {
+																id : row[0].id,
+																num : num,
+																time : time,
+																money : money,
+																desc : $("#kk")
+																		.val()
+
+															},
+															success : function(
+																	one) {
+															
+																if (one == "保存成功") {
+																	$.ajax({
+																		url : '/addID',
+																		type : 'get',
+																		success : function(one) {
+																	$('#dd').combo('setText','');
+																			alert(one);
+																			
+																		}
+																	})
+																	
+																	
+																	//改变状态
+																	var rows = $(
+																			'#table1')
+																			.datagrid(
+																					'getSelected');
+																	var index = $(
+																			'#table1')
+																			.datagrid(
+																					'getRowIndex',
+																					rows);
+																	$("#succy")
+																			.val(
+																					2);
+																	$('#table1')
+																			.datagrid(
+																					"updateRow",
+																					{
+																						index : index,
+																						row : {
+																							materialstart : '完成'
+																						}
+																					});
+																}
+															}
+														})
+											} else {
+
+												alert("重要信息为填写");
+											}
+											;
+
+										}
+									},
+									'-',
+									{
+										text : '全部需求录入完毕',
+										iconCls : 'icon-ok',
+										handler : function() {
+											var r = confirm("确定录入完毕！");
+											if (r == true) {
+												window.parent.main.location = "Order_ytb_list";
+											} 
+										
+										}
+									}, ],
+
+							columns : [ [
+									{
+										title : '物资编码',
+										field : 'materialNum',
+										width : 180,
+										height : 20,
+										align : 'center'
+									},
+									{
+										title : '物资名称',
+										field : 'materialName',
+										width : 180,
+										height : 20,
+										align : 'center'
+									},
+									{
+										title : '数量',
+										field : 'materialCount1',
+										width : 180,
+										height : 20,
+										align : 'center',
+										formatter : function(value, row, index) {
+											var time = $("#hh").val();
+											return time;
+										}
+									},
+									{
+										title : '计量单位',
+										field : 'materialUnit',
+										width : 180,
+										height : 20,
+										align : 'center'
+									},
+									{
+										title : '预单价(元)',
+										field : 'materialYPrice',
+										width : 180,
+										height : 20,
+										align : 'center',
+										formatter : function(value, row, index) {
+											var time = $("#jj").val();
+											return time;
+										}
+
+									},
+									{
+										title : '交货期',
+										field : 'materialdate',
+										width : 180,
+										height : 20,
+										align : 'center',
+										formatter : function(value, row, index) {
+											var time = $("#dd").val();
+											return time;
+										}
+
+									},
+									{
+										title : '备注',
+										field : 'materialdesc',
+										width : 350,
+										height : 20,
+										align : 'center',
+										formatter : function(value, row, index) {
+											var time = $("#kk").val();
+											return '<textarea id="kk" name="remark"></textarea>';
+										}
+
+									}
+
+							] ],
+							striped : true,
+							url : '/findMa',
+							method : 'get'
+
+						});
+
+		$('#tt').appendTo('.datagrid-toolbar');
+		$('#dd').datebox({
+			required : true,
+			onSelect : function(date) {
+
+				$('#tb1').datagrid('load', {
+
+				});
+
+			}
+
+		});
+		$("#hh").change(function() {
+			$("#tb1").datagrid("reload");
+		});
+		$("#jj").change(function() {
+			$("#tb1").datagrid("reload");
+		});
+		$("#kk").change(function() {
+			$("#tb1").datagrid("reload");
+		});
+
+	});
+</script>
+<SCRIPT language=JavaScript src="css/pub_Calendar.js"></SCRIPT>
+<title>录入采购需求</title>
+
+</head>
+<body>
+	<table border=0 width=90% align=center>
+		<tr>
+			<td align=center>选择物资====><font color=red>录入需求计划</font>====>需求计划确认
+			</td>
+		</tr>
+	</table>
+	<center>
+		<form name="form" action="Order_wtb_list.htm" method="post"
+			enctype="multipart/form-data">
+			<div>
+				<table>
+					<tr>
+						<td></td>
+					</tr>
+				</table>
+				<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0
+					width="100%" bgColor=#336699 borderColorLight=#006699 border=0>
+
+					<tr>
+						<td>
+							<table cellpadding="3" cellspacing="1" border="0" height=400
+								width="100%" id="table1">
+
+							</table>
+						</td>
+					</tr>
+				</table>
+
+
+			</div>
+			<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0
+				width="100%" bgColor=#336699 borderColorLight=#006699 border=0>
+				<tr>
+					<td>
+						<table id="tb1" cellpadding="3" cellspacing="1" border="0"
+							width="100%">
+							<div id="tt" Style="margin: 0px; padding: 5px">
+								选择交货日期：<input id="dd" type="text"></input> 数量：<input id="hh"
+									type="text" style="width: 60px"></input> 预单价：<input id="jj"
+									type="text" style="width: 60px"></input>
+							</div>
+
+						</table>
+					</td>
+				</tr>
+			</table>
+	</center>
+	<input type="hidden" name="p_ordercode" value="1000201011133304">
+	<input type="hidden" name="p_orderno" value="1000201011133304">
+	<input type="hidden" name="p_type" value="">
+	<input type="hidden" name="p_ftype" value="2">
+	<input type="hidden" id="succy" value="1">
+	</form>
+</body>
+</html>

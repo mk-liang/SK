@@ -1,0 +1,184 @@
+<!-- saved from url=(0061)http://169.254.158.100/zzdl/ContApply/Apply_list.asp?p_type=3 -->
+<HTML><HEAD><TITLE>待审批采购计划一览表</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META http-equiv=Content-Language content=zh-cn>
+<META content="MSHTML 6.00.2900.5626" name=GENERATOR>
+<META content=FrontPage.Editor.Document name=ProgId><LINK 
+href="js/style.css" rel=stylesheet>
+<link rel="stylesheet" href="css/style.css">
+<script Language="JavaScript" src="css/pub_Calendar.js"></script>
+<script src="jquery-easyui-1.6.3/jquery.min.js" charset="utf-8"></script>
+<!-- easyui依赖的js -->
+<script src="jquery-easyui-1.6.3/jquery.easyui.min.js" charset="utf-8"></script>
+<!--引用对应的语言包 -->
+<script src="jquery-easyui-1.6.3/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+<!-- 引用图标样式 -->
+<link rel="stylesheet" href="jquery-easyui-1.6.3/themes/icon.css">
+<!-- 引用默认的样式 -->
+<link rel="stylesheet" href="jquery-easyui-1.6.3/themes/default/easyui.css">
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="DataTables-1.10.15/media/css/jquery.dataTables.css">
+<script type="text/javascript" th:inline="javascript">
+$(function(){ 
+	
+	$("#table1").datagrid({
+		title:'采购计划审批',
+		toolbar: [{
+        		text:'审批',
+				iconCls: 'icon-ok',
+				handler: function(){
+					//获取选中行
+					var rows = $("#table1").datagrid("getChecked");
+					if(rows.length==0){
+						alert("您还没选择！");
+					}else{
+						$(rows).each(function(index,data){
+							
+							$(location).attr('href', 'SeeDest2?id='+data.id);
+
+						});
+						
+						
+					}
+
+					
+	      }},
+	        '-',{ 
+				text:'打开',
+				iconCls: 'icon-help',
+				handler: function(){
+					
+				var rows = $("#table1").datagrid("getChecked");	
+				if(rows.length==0){
+					alert("至少选择一条数据！");
+				}else if(rows.length>1){
+					alert("一次只能查看一条数据！");
+			  
+				}else{
+					$(rows).each(function(index,data){
+						$(location).attr('href', 'SeeDest1?id='+data.id);
+					});
+			
+					
+				}
+				
+
+				}
+	        }
+		
+		]
+		,
+		 columns:[
+			 [
+				 {
+					 title:'选择',
+					 width:100,
+					 field:'cz',
+					 checkbox:true
+				 },
+				 {
+					 title:'序号',
+					 field:'id',
+					 width:169,
+					 height:20,
+					 align:'center'
+				 },
+				 {
+					 title:'采购计划名称',
+					 field:'stockName',
+					 width:269,
+					 height:20,
+					 align:'center'
+				 },
+				 {
+					 title:'进度',
+					 field:'mapping',
+					 width:230,
+					 height:20,
+					 align:'center',
+					 formatter : function(value, row, index) {
+								if(row.mapping.status=="C001-10"){ 
+									return "未确定";
+								}else if(row.mapping.status=="C001-20"){
+									return "未编采购计划";
+								}else if(row.mapping.status=="C001-30"){
+									return "未报批";
+								}else if(row.mapping.status=="C001-40"){
+									return "代审批";
+								}else if(row.mapping.status=="C001-50"){
+									return "未下达";
+								}else{
+									
+									return "后续";
+								}
+					 }
+
+				 }
+				 ,
+				 {
+					 title:'报价总金额',
+					 field:'company',
+					 width:256,
+					 height:20,
+					 align:'center'
+				 }
+				 ,
+				 {
+					 title:'揭示时间',
+					 field:'company',
+					 width:296,
+					 height:20,
+					 align:'center'
+				 } ,
+				 {
+					 title:'对应询价书',
+					 field:'company',
+					 width:296,
+					 height:20,
+					 align:'center',
+					 formatter : function(value, row, index) {
+							return row.enq.enquireName;
+						}
+
+				 }
+				 
+				
+			 ]
+		 ], 
+		 url:'/ftock',
+		 method:'get',
+		 pagination:true,//分页工具
+		 fitColumns:false,
+		 singleSelect:true,
+		 onLoadSuccess:function(data){
+		
+		    
+			 
+		 }
+		   
+	 });
+	
+	
+	
+});
+
+
+</script>
+</HEAD>
+<BODY>
+<CENTER>
+<FORM name=form action=Apply_list_do.asp method=post>
+<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0 width="100%" 
+bgColor=#336699 borderColorLight=#006699 border=1>
+  <TBODY>
+  <TR>
+    <TD>
+      <TABLE cellSpacing=1 cellPadding=3 width="100%" border=1>
+        <TBODY>
+        <TR bgColor=#ffffff>
+          <TD align=middle width="100%" bgColor=#ffffff colSpan=20 
+            height=22><B>
+            <H2><FONT color=#0070c0>采购计划申请一览表</B></FONT></H2></TD></TR>
+      </TBODY></TABLE>
+      <table id="table1"></table>
+      </TD></TR></TBODY></TABLE></FORM></CENTER></BODY></HTML>

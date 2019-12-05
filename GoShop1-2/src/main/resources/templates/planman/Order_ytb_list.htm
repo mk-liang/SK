@@ -1,0 +1,618 @@
+<HTML><HEAD><TITLE>需求一览表</TITLE>
+<SCRIPT language=JAVASCRIPT> 
+function select_check(theForm)
+      {
+        var count=0;
+        for (var k = 0; k < theForm.length; k++)
+        if ((theForm[k].type == "checkbox") && (theForm[k].checked))
+        count++;
+         if (count==0)
+         {
+            for (k = 0; k < theForm.length; k++)
+            {
+              if (theForm[k].type == "checkbox")
+              theForm[k].checked=true;
+            }
+         }
+         else
+         {
+            for (k = 0; k < theForm.length; k++)
+            {
+              if (theForm[k].type == "checkbox")
+              theForm[k].checked=false;
+            }
+         }
+      }
+function chck()
+{  var  count=0;
+   for (var i=0;i<form.length;i++)
+   if ((form[i].type == "radio") && (form[i].checked))
+   count++; 
+   if (count==0)
+      { return false;  }
+   else
+      { return true;   }
+}
+ 
+function Add(SourceList,TargetList)
+	{
+	var nIndex = SourceList.selectedIndex;
+ 	var nCount = 0;  
+	if (nIndex == -1)
+	{
+		// Process continue only if at least one item selected
+		//alert("请先选择一项!");
+		return;
+	}
+	for (i=0;i<SourceList.length;i++)
+  {
+     if (SourceList.options(i).selected==true)
+     {    
+         if (inSouceList(SourceList.options(i).value,TargetList)==false)
+         {
+          	var objSelected = new Option(SourceList[i].text, SourceList[i].value);
+           	TargetList.options[TargetList.length] = objSelected;
+         }
+     }     
+	}
+  for (var i=0;i<TargetList.options.length;i++)
+  {
+    TargetList.options(i).selected=true;
+  }
+	if(navigator.appName=="Netscape")
+	{
+		history.go(0)
+	}
+ }
+ function inSouceList(SourceListOption,TargetList)
+ {
+ 	  for (i=0;i<TargetList.length;i++)
+    {
+	     if (TargetList.options[i].value==SourceListOption)
+       {
+        	 return true;
+       }
+    }   
+    return false;
+ }  
+function Remove(SelectList)
+	{
+	var nIndex = SelectList.selectedIndex;
+ 	var nCount = 0;
+	if (nIndex == -1)
+	{
+		// Process continue only if at least one item selected
+		//alert("请先选择一项!");
+		return;
+	}
+  while(nCount<SelectList.length)
+  {
+       if (SelectList.options(nCount).selected==true)
+       {
+       	 SelectList.options[nCount] = null;
+       }
+       else
+       {
+         nCount++;
+       }
+  }
+	if(navigator.appName=="Netscape")
+		{
+		history.go(0)
+		}	
+	}
+ function enter()
+ {
+   var srcEle = window.event.srcElement;
+   var tmp;   
+   tmp = window.showModalDialog("pub_pub.Dialog_Date?vc_input=" + srcEle.value);
+     if ( tmp.indexOf("/") != -1)
+     {
+        srcEle.value = tmp;
+     }
+     return;
+ }   
+ function check_num()
+ {
+ 	 if (window.event.keyCode > 57 || window.event.keyCode < 48)
+	 {
+	 		window.event.returnValue = false;
+	 }
+ }
+ function check_blank()
+ {
+ 	 if (window.event.keyCode < 48)
+	 {
+	 		window.event.returnValue = false;
+	 }
+ }
+  
+function check_num_dot()
+{
+ 	 if (window.event.keyCode > 57 || window.event.keyCode < 46)
+	 {
+  		 window.event.returnValue = false;   
+	 }
+   else
+   {
+      if(window.event.keyCode==47)
+      {
+    		 window.event.returnValue = false;
+      }
+      if(window.event.keyCode==46)
+      {
+         if (window.event.srcElement.value.indexOf(".")!=-1)
+         {
+        		 window.event.returnValue = false;
+         }
+      }   
+    }  
+ }
+  
+ function submitonce(theform)
+ {
+ if (document.all || document.getElementById)
+ {
+ for (i=0;i<theform.length;i++)
+ {
+ var tempobj = theform.elements[i]
+ if (tempobj.type.toLowerCase() =="button")
+ tempobj.disabled = true
+ }
+ }
+ }
+ 
+  function CheckAll() 
+ {
+   var i = 0;
+   for (i=0; i < window.document.forms[0].elements.length; i++) 
+   {
+     if(window.document.forms[0].elements[i].Chk<3) 
+     {
+       if(window.document.forms[0].elements[i].value=="")
+       {
+         alert(window.document.forms[0].elements[i].alt);
+         window.document.forms[0].elements[i].focus();
+         return;
+       }
+       else if (window.document.forms[0].elements[i].Chk==2)
+       {
+         if (NotNumber(window.document.forms[0].elements[i].value))
+         {
+            alert("提示信息：\n不是有效的数字，请重新输入。");
+            window.document.forms[0].elements[i].focus();
+            return;
+         }
+       }
+     }
+     else if(window.document.forms[0].elements[i].Chk==3)
+     {
+       if(window.document.forms[0].elements[i].value!="")
+       {
+         if (NotNumber(window.document.forms[0].elements[i].value))
+         {
+            alert("提示信息：\n不是有效的数字，请重新输入。");
+            window.document.forms[0].elements[i].focus();
+            return;
+         }
+       }
+     }
+   }
+   window.document.forms[0].submit();
+   return true;
+ }
+ function NotNumber(Field)
+ {
+   var j = 0;
+   var k = 0;
+   for (var i=0; i<Field.length; i++)
+   {
+      var ch=Field.substring(i,i+1);
+      if((ch>="0")&&(ch<="9")) 
+      {
+        j=0;
+      }
+      else if(ch==".") 
+      {
+        k++;
+      }
+      else
+      {
+        j=1;
+        break;
+      }
+   }
+   if ((j==0)&&(k<2))
+   {
+      return false;
+   }
+   else
+   {
+      return true;
+   }
+ }
+ function openwindown(page)
+ {
+    window.open(page,"newuser","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=700,height=400,left=100,top=150");
+ }
+ 
+ function print_order_detail(){
+	  	window.open("print_order_detail.htm","Canny2","toolbar=0,location=0,status=0,menubar=0,scrollbars=0,width=600,height=440,left=100,top=60");
+	  }
+	  
+	 
+</SCRIPT>
+
+<META http-equiv=Content-Language content=zh-cn>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META content="MSHTML 6.00.2900.5626" name=GENERATOR>
+<META content=FrontPage.Editor.Document name=ProgId><LINK 
+href="css/style.css" rel=stylesheet>
+<SCRIPT language=JavaScript src="css/pub_Calendar.js"></SCRIPT>
+
+<SCRIPT language=javascript>
+      function submit_form(theForm,i)
+      {
+	  
+        var count=0;
+        for (var k = 0; k < theForm.length; k++)
+        if ((theForm[k].type == "radio") && (theForm[k].checked))
+        count++;
+        if (count==0)
+        {
+          alert("提示信息：\n请选择需求计划。");
+          return;
+        }
+        document.form.p_type.value=i;
+        window.document.form.submit();
+        return true;
+      }
+      function submit_form_cx()
+      {
+        form.action="Order_ytb_list.asp";
+        window.document.form.submit();
+      }
+	   function workLog01() 
+ 	 {
+  		window.open("work_log01.htm","Canny1","toolbar=0,location=0,status=0,menubar=0,scrollbars=0,width=600,height=440,left=100,top=60");
+      
+ 	 }
+	 
+		 
+	 function update_xuqiujihua(){
+	
+	 	var obj = document.getElementsByName("checkbox");
+		var len = obj.length;
+		var count=0;
+		var no=0;
+		for(var i=0;i<len;i++){
+			if(obj[i].checked){
+				count++;
+				var objTable = document.getElementById("table1");
+				var oldTr=objTable.rows[i+1];
+				if(oldTr.cells[6].innerText=="确定"){
+					alert("已确定的需求计划不能修改！");
+					no=1;
+					break;
+				}
+			}
+		}
+		if(count==0){
+			alert("至少选择一条数据修改！");
+		}else if(count>1){
+			alert("一次只能修改一条数据！");
+		}else if(no=0){
+				window.location="update_xuqiujihua.htm";
+				}
+	 }
+	 
+	  function quedingData(){
+	 	var obj = document.getElementsByName("checkbox");
+		var len = obj.length;
+	 	var count=0;
+		var no=0;
+		for(var i=0;i<len;i++){
+			if(obj[i].checked){
+				count++;
+				var objTable = document.getElementById("table1");
+				var oldTr=objTable.rows[i+1];
+				if(oldTr.cells[6].innerText=="确定"){
+					alert("选定的数据中有数已确定，请重新选择。");
+					no=1;
+					break;
+				}
+			}
+		}
+		if(count==0){
+			alert("至少选择一条数据！");
+		}else if(no!=1){
+			
+			for(var i=0;i<len;i++){
+			if(obj[i].checked){
+				var objTable = document.getElementById("table1");
+				var oldTr=objTable.rows[i+1];
+				oldTr.cells[6].innerText="确定";
+			}
+		}
+		}		
+	}
+	 
+	 function getLen(){
+		 obj01=document.getElementById("table1");
+	 	cGetRow=window.event.srcElement.parentElement.parentElement.rowIndex;
+	 }
+	 
+	 
+	 function delData(){
+	 	var obj = document.getElementById("p_orderno");
+	 	if(obj.checked){
+			obj01.deleteRow(cGetRow);
+		}else{
+			alert("请选择要删除的数据！");
+		}
+	 }
+	
+	 function opp(obj){
+	  var c=document.getElementById("xiugai");
+	   var d=document.getElementById("shanchu");
+	  c.disabled=obj;
+	   d.disabled=obj;
+	 
+	 }
+	 
+	  function ddtzDdmx() 
+ 	 {
+	 	var obj = document.getElementsByName("checkbox");
+		var len = obj.length;
+	 	var count=0;
+		for(var i=0;i<len;i++){
+			if(obj[i].checked){
+				count++;
+			}
+		}
+		if(count==0){
+			alert("至少选择一条数据！");
+		}else if(count>1){
+			alert("一次只能查看一条数据！");
+		}else{
+			window.open("print_order_detail.htm","Canny2","toolbar=0,location=0,status=0,menubar=0,scrollbars=0,width=600,height=440,left=100,top=60");
+			
+		}
+  		
+      
+ 	 }
+</SCRIPT>
+<script src="jquery-easyui-1.6.3/jquery.min.js" charset="utf-8"></script>
+<!-- easyui依赖的js -->
+<script src="jquery-easyui-1.6.3/jquery.easyui.min.js" charset="utf-8"></script>
+<!--引用对应的语言包 -->
+<script src="jquery-easyui-1.6.3/locale/easyui-lang-zh_CN.js"
+	charset="utf-8"></script>
+<!-- 引用图标样式 -->
+<link rel="stylesheet" href="jquery-easyui-1.6.3/themes/icon.css">
+<!-- 引用默认的样式 -->
+<link rel="stylesheet"
+	href="jquery-easyui-1.6.3/themes/default/easyui.css">
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css"
+	href="DataTables-1.10.15/media/css/jquery.dataTables.css">
+	<script type="text/javascript">
+	$(function() {
+		//第一个
+		$("#table1").datagrid({
+			title : '需求计划',
+			toolbar: [{
+				text:'确定',
+				iconCls: 'icon-ok',
+				handler: function(){
+					//获取选中行
+					var rows = $("#table1").datagrid("getChecked");
+					if(rows.length==0){
+						alert("您还没选择！");
+					}else{
+						$(rows).each(function(index,data){
+							$.ajax({
+							    url:'/UpStatus',
+							    type:'post',
+							    data:{
+							    	id:data.mapping.id
+							    },
+							    success:function(one){
+						          
+							    }
+							})
+							
+						});
+						//重新加载数据表格
+						$("#table1").datagrid("reload");
+						
+					}
+					
+				}
+			},
+			'-',{ 
+				text:'编辑信息',
+				iconCls: 'icon-edit',
+				handler: function(){
+					var rows = $("#table1").datagrid("getChecked");	
+					if(rows.length==0){
+						alert("至少选择一条数据！");
+					}else if(rows.length>1){
+						alert("一次只能编辑一条数据！");
+				  
+					}else{
+						$(rows).each(function(index,data){
+							$(location).attr('href', 'Updetails?id='+data.id);
+						});
+				
+						
+					}
+				}
+	        },
+	        '-',{ 
+				text:'删除信息',
+				iconCls: 'icon-remove',
+				handler: function(){
+					//获取选中行
+					var rows = $("#table1").datagrid("getChecked");
+					$(rows).each(function(index,data){
+						$.ajax({
+						    url:'/delOrders',
+						    type:'post',
+						    data:{
+						    	id:data.id
+						    },
+						    success:function(one){
+						    	
+						    }
+						})
+					});
+					
+					//重新加载数据表格
+					$("#table1").datagrid("reload");
+	
+				}
+	        },
+	        '-',{ 
+				text:'详情信息',
+				iconCls: 'icon-help',
+				handler: function(){
+					
+				var rows = $("#table1").datagrid("getChecked");	
+				if(rows.length==0){
+					alert("至少选择一条数据！");
+				}else if(rows.length>1){
+					alert("一次只能查看一条数据！");
+			  
+				}else{
+					$(rows).each(function(index,data){
+						$(location).attr('href', 'lookdetails?id='+data.id);
+					});
+			
+					
+				}
+				
+
+				}
+	        },
+			'-',{ 
+	            text: '物资编码：<input type="text" id="userid"/>' 
+	        },'-',{ 
+	            text: '物资名称：<input type="text" id="username"/>' 
+	        },'-',{
+	        	text: '状态：<select  id="select" name="select"><option value="C001">全部</option><option value="C001-10">未确定</option><option value="C001-20">确定</option></select>'
+	      }, 
+	        { 
+				iconCls: 'icon-search',
+				text:'查询',
+				handler: function(){
+					 var test=$('#userid').val();
+					 var test1=$('#username').val();
+					 var test2=$('#select').val();
+					 
+					
+						$('#table1').datagrid('load',{
+							status: test2,
+							materialCode: test,
+							materialName:test1
+				        
+				        });
+				test.val("");
+				test1.val("");
+						
+					
+				}
+	        }, 
+			]
+			,
+			columns : [ [ {
+				title : '选择',
+				width : 100,
+				field : 'cz',
+				checkbox : true
+			}, {
+				title : '序号',
+				field : 'id',
+				width : 280,
+				height : 20,
+				align : 'center'
+			}, {
+				title : '物资编码',
+				field : 'materialCode',
+				width : 280,
+				height : 20,
+				align : 'center'
+			}, {
+				title : '物资名称',
+				field : 'materialName',
+				width : 280,
+				height : 20,
+				align : 'center'
+			}, {
+				title : '数量',
+				field : 'amount',
+				width : 280,
+				height : 20,
+				align : 'center'
+			}, {
+				title : '采购进度',
+				field : 'mapping',
+				width : 300,
+				height : 20,
+				align : 'center',
+				formatter : function(value, row, index) {
+				
+					if(row.mapping.status=="C001-10"){
+						return "未确定";
+					}else{
+						return "确定";
+						
+					}
+
+				}
+
+			}
+
+			] ],
+			url : '/findPlan',
+			method : 'get',
+			pagination:true,//分页工具
+		     pageSize:5,//页面显示几条
+			 pageNumber:1,//显示第一页
+			 pageList:[5,10,15],//显示条数
+			onSelect : function(index, row) {
+			
+			}
+
+		});
+	});
+		
+	
+	
+	
+	
+	
+	</script>
+</HEAD>
+<BODY>
+<CENTER>
+<FORM name=form action=Order_ytb_do.asp method=post><INPUT type=hidden value=3 
+name=p_type> 
+<H2><FONT color=#0070c0>需求计划一览表</FONT></H2>
+<TABLE cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff 
+borderColorLight=#ffffff border=0>
+  <TBODY>
+  <TR>
+    <TD>
+      <TABLE cellSpacing=1 cellPadding=3 width="100%" border=0>
+        <TBODY>
+       
+<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0 width="100%" 
+bgColor=#336699 borderColorLight=#006699 border=0>
+  <TBODY>
+  <TR>
+    <TD>
+      <TABLE cellSpacing=1 cellPadding=3 width="100%" border=0 id="table1">
+       
+       </TD></TR></TBODY></TABLE>
+            </FORM></CENTER></CENTER></BODY></HTML>

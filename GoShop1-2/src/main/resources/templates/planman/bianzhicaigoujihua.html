@@ -1,0 +1,283 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Language" content="zh-cn">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<link rel="stylesheet" href="css/style.css">
+<script Language="JavaScript" src="css/pub_Calendar.js"></script>
+<title>编制采购计划</title>
+<script src="jquery-easyui-1.6.3/jquery.min.js" charset="utf-8"></script>
+<!-- easyui依赖的js -->
+<script src="jquery-easyui-1.6.3/jquery.easyui.min.js" charset="utf-8"></script>
+<!--引用对应的语言包 -->
+<script src="jquery-easyui-1.6.3/locale/easyui-lang-zh_CN.js"
+	charset="utf-8"></script>
+<!-- 引用图标样式 -->
+<link rel="stylesheet" href="jquery-easyui-1.6.3/themes/icon.css">
+<!-- 引用默认的样式 -->
+<link rel="stylesheet"
+	href="jquery-easyui-1.6.3/themes/default/easyui.css">
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css"
+	href="DataTables-1.10.15/media/css/jquery.dataTables.css">
+<script type="text/javascript" th:inline="javascript">
+	$(function() {
+		//第一个
+		$("#table1").datagrid({
+			title : '满足条件的供应商',
+			toolbar: [{
+	        	text: '采购方式：<select  id="ss" onchange="change();"   ><option value="C000-1">公开采购</option><option value="C000-2">定向询价</option></select>'
+	      }, 
+	        { 
+				iconCls: 'icon-ok',
+				text:'确定提交',
+				handler: function(){
+					var type=$("#ss").val();
+					if(type=="C000-1"){
+						$.ajax({
+						    url:'/edit',
+						    type:'post',
+						    data:{
+						    	id:$("#id").text(),
+						    	stocknum:$("#stocknum").val(),
+						    	userid:$("#userid").val(),
+						    	username:$("#username").val(),
+						    	type:$("#ss").val(),
+						    	money:$("#money").val(),
+						    	text:$("#text").val()
+						    },
+						    success:function(one){
+				           if(one=="保存成功"){
+						    var list=[[${list}]];
+						    var arrs=new Array();
+						    for(var i=0;i<list.length;i++){
+		                           arrs[i]=list[i].id;
+		                     }
+						    $.ajax({
+							    url:'/into',
+							    type:'post',
+							    data:{
+							    	id:arrs
+							    },
+							    success:function(one){
+							    	alert(one);
+							    	$(location).attr('href', '/Project_list');
+
+							    }
+							})
+		                		
+						    	}else{
+						    		
+						    		alert(one);
+						    	}
+						    }
+						})
+					}else{
+						$.ajax({
+						    url:'/edit',
+						    type:'post',
+						    data:{
+						    	id:$("#id").text(),
+						    	stocknum:$("#stocknum").val(),
+						    	userid:$("#userid").val(),
+						    	username:$("#username").val(),
+						    	type:$("#ss").val(),
+						    	money:$("#money").val(),
+						    	text:$("#text").val()
+						    },
+						    success:function(one){
+				           if(one=="保存成功"){
+						    var list=[[${list}]];  //物资id
+						    var arrs=new Array();
+						    for(var i=0;i<list.length;i++){
+		                           arrs[i]=list[i].id;
+		                     }
+						    //获取选中行
+						    var rows = $("#table1").datagrid("getChecked");
+						    if(rows.length==0){
+						    	alert("您还没选择！");	    	
+						    }else{
+						    	
+						    	 $(rows).each(function(index,data){
+							    	 $.ajax({
+										    url:'/into1',
+										    type:'post',
+										    data:{
+										    	id:data.id,
+										    	sid:arrs
+										    },
+										    success:function(one){
+										    	alert(one);
+										    	$(location).attr('href', '/Project_list');
+
+										    }
+										})
+								});
+						    	
+						    }
+						   
+
+		                		
+						    }else{
+						    		
+						    		alert(one);
+						    	}
+						    }
+						})
+						
+						
+					}
+		
+		}
+	        }, 
+			]
+			,
+			columns : [ [ {
+				title : '选择',
+				width : 100,
+				field : 'cz',
+				checkbox : true
+			}, {
+				title : '供应商序号',
+				field : 'id',
+				width : 680,
+				height : 20,
+				align : 'center'
+			}, {
+				title : '供应商名称',
+				field : 'company',
+				width : 750,
+				height : 20,
+				align : 'center'
+			}
+			] ],
+			url : '/findSup',
+			method : 'get',
+			pagination:true,//分页工具
+			singleSelect:true,
+		    pageSize:5,//页面显示几条
+			pageNumber:1,//显示第一页
+			pageList:[5,10,15],//显示条数
+			onSelect : function(index, row) {
+			
+			}
+
+		});
+		
+	});
+	function change(){
+		var type=$("#ss").val();
+		if(type=="C000-1"){
+		
+			$('#table1').datagrid('load',{
+				    });
+			
+		}else{
+			  var list=[[${list}]];
+			  var num=list[0].materialName;
+			$('#table1').datagrid('load',{
+				id:num
+				    });
+
+			
+		}
+		
+		
+	}
+
+	</script>
+
+</head>
+<body>
+<center>
+
+    <h2><font color=#0070C0>编制采购计划</font></h2>
+
+ <form name="form"  action="Project_Save.asp" method="post">
+ 
+<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0     width="100%"  bgColor=#336699 borderColorLight=#006699 border=0>
+<tr>
+<td>
+<table cellpadding="3" cellspacing="1" border="1" width="100%" th:object="${em}">
+
+ <tr>
+       <tr class="t1">
+<td>采购计划编号</td>
+      	<td id="id" th:text="${bh}">
+      	    	</td>
+<td><font color=red>采购计划名称</font></td>
+      <td>
+      <input id="stocknum" type="text" name="p_input" size="20" maxlength="100" th:value="${bh}" >      </td>      
+</tr>
+       <tr class="t1" >
+<td>公司名称</td>
+      	<td>
+        株洲南车时代电气股份有限公司
+      	<input type="hidden" name="p_input" value="1000">      	</td>
+<td>编制人</td>
+       <td>
+       <input type="hidden" id="userid" th:value="*{id}">
+       <input type="text" id="username" name="p_input" size="20"  readonly  maxlength="100" th:value="*{empName}">       </td>
+</tr>
+       <tr class="t1" >
+<td>预算金额(元)</td>
+       <td>
+       <input id="money" type="text" name="p_input" size="20" maxlength="20" th:value="${sum}" onKeyPress="check_num_dot()" Chk=3>       </td>
+<td>采购计划编制时间</td>
+       <td th:text="${time}"> </td>
+</tr>
+</table></td></tr></table>
+
+<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0     width="100%"  bgColor=#336699 borderColorLight=#006699 border=0>
+<tr>
+<td>
+<table cellpadding="3" cellspacing="1" border="1" width="100%">
+    <tr class="t1">
+    <td nowrap align="center">序号</td>
+    <td nowrap align="center">物资编码</td>
+    <td nowrap align="center">物资名称</td>
+    <td nowrap align="center">数量</td>
+    
+    <td nowrap align="center">计量<br>单位</td>
+    <td nowrap align="center">交货期</td> 
+    
+       <td nowrap align="center">协议价格<br>（元）</td>
+    
+    <td nowrap align="center">预算总金额<br>（元）</td>
+    <td nowrap align="center">计划价<br>（元/不含税）</td>
+ 
+    </tr>
+    <tr class="T2" th:each="list,listStat:${list}">
+     
+       <td align=center th:text="${listStat.count}"></td>
+       <td th:text="${list.materialCode}"><br></td>
+       <td ><a th:text="${list.materialName}" ></a><br></td>
+       <td align=right th:text="${list.amount}"><br></td>
+    
+       <td align=center th:text="${list.measureUnit}"><br></td>
+       <td align=center th:text="${list.endDate}"><br></td>
+        <td></td>
+     <td align=right name="price" th:text="${list.sumPrice}"><br></td>
+<td></td>
+       </tr>
+
+ 
+</table></td></tr></table>
+<table id="table1" cellpadding="3" cellspacing="1" border="1" width="100%">
+
+</table>
+<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0     width="100%"  bgColor=#336699 borderColorLight=#006699 border=0>
+
+<tr  class="t1" >
+<td width=15% align="center" id="text" nowrap>说明：<br>（400字以内）</td>
+<td colspan=3>
+<TEXTAREA NAME="p_input" ROWS=3 COLS=77 style="width:100%">
+
+</TEXTAREA>
+</td>
+</tr>
+
+</table></td></tr></table>
+</body>
+</html>

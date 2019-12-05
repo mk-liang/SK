@@ -1,0 +1,42 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="jquery-easyui-1.6.3/jquery.min.js" charset="utf-8"></script>
+<!-- easyui依赖的js -->
+<script src="jquery-easyui-1.6.3/jquery.easyui.min.js" charset="utf-8"></script>
+<!--引用对应的语言包 -->
+<script src="jquery-easyui-1.6.3/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+<!-- 引用图标样式 -->
+<link rel="stylesheet" href="jquery-easyui-1.6.3/themes/icon.css">
+<!-- 引用默认的样式 -->
+<link rel="stylesheet" href="jquery-easyui-1.6.3/themes/default/easyui.css">
+<script>
+	//通过js创建easyui控件 通过url属性 远程加载内容
+	$(function(){ 
+
+		$("#menus").tree({
+			
+			url:'/menus',
+			method:'get',
+			onClick:function(node){		
+				
+				window.parent.main.location=node.linkUrl;
+				
+			}
+		});
+	
+	});
+
+</script>
+</head>
+<BODY style="cursor: default; background: #e7f3ff;" text=#000000
+		leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+		<ul id="menus"></ul>
+</BODY>
+</HTML>
+
+
+
+
+

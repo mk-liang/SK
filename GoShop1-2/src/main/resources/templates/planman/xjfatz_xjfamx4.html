@@ -1,0 +1,110 @@
+<HTML xmlns:th="http://www.thymeleaf.org"><HEAD><TITLE>采购计划明细信息</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<SCRIPT language=javascript>
+		function reback()
+		{
+		 history.back ();
+		}
+</SCRIPT>
+<LINK href="css/style.css" rel=stylesheet>
+<style type="text/css">
+<!--
+.STYLE1 {
+	font-size: 24px;
+	font-weight: bold;
+}
+-->
+</style>
+<FORM name=form action="" method=post>
+<META content="MSHTML 6.00.2900.5626" name=GENERATOR></HEAD>
+<BODY th:object="${lit}">
+<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0 width="100%" 
+bgColor=#336699 borderColorLight=#006699 border=1   >
+  <TBODY>
+  <TR>
+    <TD>
+      <TABLE cellSpacing=1 cellPadding=3 width="100%" border=1 >
+        <TBODY>
+        <TR bgColor=#ffffff>
+          <TD align=middle bgColor=#ffffff colSpan=20 
+            height=22><B>
+            </B>
+          <H4 align="center" class="STYLE1"><FONT color=#0070c0>采购计划明细信息</FONT>
+            </FONT>
+            </H2>
+          </H4>
+          </TD>
+        </TR>
+        <TR class=t1>
+          <TD noWrap width="16%">采购计划编号</TD>
+          <TD width="38%" noWrap class=t2 th:text="*{stockNum}" ></TD>
+          <!--*******************************************************************以下为第二列****************************************************************-->
+          <TD noWrap width="28%">采购计划名称</TD>
+          <TD width="18%" noWrap class=t2 th:text="*{stockName}"></TD>
+        </TR>
+        <TR class=t1>
+          <TD noWrap width="16%">公司名称</TD>
+          <TD class=t2 noWrap>株洲南车时代电气股份有限公司</TD><!--*******************************************************************以下为第二列****************************************************************-->
+          <TD noWrap width="28%">编制人</TD>
+          <TD class=t2 noWrap th:text="*{author}"></TD></TR>
+        <TR class=t1>
+          <TD noWrap width="16%">预算金额(元)</TD>
+          <TD class=t2 noWrap th:text="*{budget}"></TD><!--*******************************************************************以下为第二列****************************************************************-->
+          <TD noWrap width="28%">采购计划编制时间</TD>
+          <TD class=t2 noWrap th:text="*{startDate}"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0 width="100%" 
+bgColor=#336699 borderColorLight=#006699 border=1>
+  <TBODY>
+  <TR>
+    <TD>
+      <TABLE cellSpacing=1 cellPadding=3 width="100%" border=1>
+        <TBODY>
+        <TR class=t1>
+          <TD noWrap align=middle>序号</TD>
+          <TD noWrap align=middle>物资编码</TD>
+          <TD noWrap align=middle>物资名称</TD>
+          <TD noWrap align=middle>数量</TD>
+          <TD noWrap align=middle>计量<BR>单位</TD>
+          <TD noWrap align=middle>交货期</TD>
+          <TD noWrap align=middle>协议价格<BR>（元）</TD>
+          <TD noWrap align=middle>预算总金额<BR>（元）</TD>
+          <TD noWrap align=middle>计划价<BR>（元/不含税）</TD></TR>
+         <tr class="T2" th:each="list,listStat:${list}">
+     
+       <td align=center th:text="${listStat.count}"></td>
+       <td th:text="${list.materialCode}"><br></td>
+       <td ><a th:text="${list.materialName}" ></a><br></td>
+       <td align=right th:text="${list.amount}"><br></td>
+    
+       <td align=center th:text="${list.measureUnit}"><br></td>
+       <td align=center th:text="${list.endDate}"><br></td>
+        <td></td>
+     <td align=right name="price" th:text="${list.sumPrice}"><br></td>
+<td></td>
+       </tr></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0 width="100%" 
+bgColor=#336699 borderColorLight=#006699 border=1>
+  <TBODY>
+  <TR>
+    <TD>
+      <TABLE cellSpacing=1 cellPadding=3 width="100%" border=1>
+        <TBODY>
+        <TR>
+          <TR th:if="*{stockType=='C000-1'}">
+                 <TD class=T1 noWrap width="20%" th:if="*{stockType=='C000-1'}">采购方式</TD>
+                 <TD class=T2>公开求购</TD>
+               </TR>
+               <TR th:if="*{stockType=='C000-2'}">
+                 <TD class=T1 noWrap width="20%" th:if="*{stockType=='C000-2'}">采购方式</TD>
+                 <TD class=T2>定向询价</TD>
+               </TR>
+
+        <TR>
+          <TD class=t1 noWrap width="20%" >说明</TD>
+          <TD class=t2 th:text="*{remark}"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<TABLE style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0 width="100%" 
+bgColor=#336699 borderColorLight=#006699 border=1>
+ </TABLE><BR></FORM>
+ 
+<CENTER><INPUT id=button1 onclick=reback() type=button value=返回 name=button1> 
+</CENTER></BODY></HTML>

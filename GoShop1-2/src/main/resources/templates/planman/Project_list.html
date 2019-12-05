@@ -1,0 +1,218 @@
+<HTML><HEAD><TITLE>采购计划一览表</TITLE>
+<META http-equiv=Content-Language content=zh-cn>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META content="MSHTML 6.00.2900.5626" name=GENERATOR>
+<META content=FrontPage.Editor.Document name=ProgId><LINK 
+href="css/style.css" rel=stylesheet>
+<SCRIPT language=JavaScript src="css/pub_Calendar.js"></SCRIPT>
+<script src="jquery-easyui-1.6.3/jquery.min.js" charset="utf-8"></script>
+<!-- easyui依赖的js -->
+<script src="jquery-easyui-1.6.3/jquery.easyui.min.js" charset="utf-8"></script>
+<!--引用对应的语言包 -->
+<script src="jquery-easyui-1.6.3/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+<!-- 引用图标样式 -->
+<link rel="stylesheet" href="jquery-easyui-1.6.3/themes/icon.css">
+<!-- 引用默认的样式 -->
+<link rel="stylesheet" href="jquery-easyui-1.6.3/themes/default/easyui.css">
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="DataTables-1.10.15/media/css/jquery.dataTables.css">
+<style type="text/css">
+<!--
+.STYLE1 {color: #FF0000}
+-->
+</style>
+<script type="text/javascript">
+$(function() {
+	//第一个
+	$("#table1").datagrid({
+		title : '采购计划',
+		toolbar: [{
+			text:'报批',
+			iconCls: 'icon-ok',
+			handler: function(){
+				//获取选中行
+				var rows = $("#table1").datagrid("getChecked");
+				if(rows.length==0){
+					alert("您还没选择！");
+				}else{
+					$(rows).each(function(index,data){
+						if(data.mapping.status=="C001-30"){
+							$.ajax({
+							    url:'/UpSts',
+							    type:'post',
+							    data:{
+							    	id:data.mapping.id
+							    },
+							    success:function(one){
+							    	$("#table1").datagrid("reload");
+							    }
+							})
+							
+						}else{
+							alert("状态不为未批报");
+						}
+					
+
+					
+						
+					});
+					
+					
+				}
+				
+			}
+		},
+        '-',{ 
+			text:'详情信息',
+			iconCls: 'icon-help',
+			handler: function(){
+				
+			var rows = $("#table1").datagrid("getChecked");	
+			if(rows.length==0){
+				alert("至少选择一条数据！");
+			}else if(rows.length>1){
+				alert("一次只能查看一条数据！");
+		  
+			}else{
+				$(rows).each(function(index,data){
+					$(location).attr('href', 'SeeDest?id='+data.id+"&s="+data.mapping.status);
+				});
+		
+				
+			}
+			
+
+			}
+        }, 
+		]
+		,
+		columns : [ [ {
+			title : '选择',
+			width : 100,
+			field : 'cz',
+			checkbox : true
+		}, {
+			title : '序号',
+			field : 'id',
+			width : 170,
+			height : 20,
+			align : 'center'
+		}, {
+			title : '采购计划名称',
+			field : 'stockName',
+			width : 180,
+			height : 20,
+			align : 'center'
+		}, {
+			title : '采购类型',
+			field : 'stockType',
+			width : 280,
+			height : 20,
+			align : 'center',
+			formatter : function(value, row, index) {
+				if(value=="C000-1"){
+					return "公开求购";
+					
+				}else{
+					
+					return "定向询价";
+					
+				}
+	        }
+			
+		}, {
+			title : '状态',
+			field : 'mapping',
+			width : 280,
+			height : 20,
+			align : 'center',
+			formatter : function(value, row, index) {
+			if(row.mapping.status=="C001-10"){ 
+				return "未确定";
+			}else if(row.mapping.status=="C001-20"){
+				return "未编采购计划";
+			}else if(row.mapping.status=="C001-30"){
+				return "未报批";
+			}else if(row.mapping.status=="C001-40"){
+				return "未审批";
+			}else if(row.mapping.status=="C001-50"){
+				return "未下达";
+			}else if(row.mapping.status=="C001-51"){
+				return "驳回";
+			}else if(row.mapping.status=="C001-52"){
+				return "废弃";
+			}else if(row.mapping.status=="C001-60"){
+				return "未编辑询价书";
+			}
+			 }
+				
+		}, {
+			title : '采购计划下达时间',
+			field : 'submitDate',
+			width : 290,
+			height : 20,
+			align : 'center',
+		   formatter: function (value, row, index) {
+                     if (value != '') {
+                         try {
+                             value = value.substring(0,10);
+                             return value;
+                         } catch (e) {
+
+                         }
+
+                     } else {
+                         return value;
+                     }
+                 }
+			
+
+		}, {
+			title : '对应询价书',
+			field : 'enq',
+			width : 280,
+			height : 20,
+			align : 'center',
+            formatter : function(value, row, index) {
+				
+				return row.enq.enquireName;
+			}
+			
+
+
+		}
+
+		] ],
+		url : '/findtock',
+		method : 'get',
+		singleSelect:true,
+		pagination:true,//分页工具
+	    pageSize:5,//页面显示几条
+		pageNumber:1,//显示第一页
+		pageList:[5,10,15],//显示条数
+		onSelect : function(index, row) {
+		
+		}
+
+	});
+});
+	
+</script>
+</HEAD>
+<BODY>
+<DIV id=overDiv style="Z-INDEX: 1; POSITION: absolute"></DIV>
+<CENTER>
+<FORM name=form action="xjfatz_xjfamx.htm" method=post>
+<H2><FONT color=#0070c0>采购计划一览表</FONT></H2>
+<TABLE cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff 
+borderColorLight=#ffffff border=1>
+  <TBODY>
+  <TR>
+    <TD>
+      <TABLE cellSpacing=1 cellPadding=3 width="100%" border=1>
+<TABLE  style="LINE-HEIGHT: 30px" cellSpacing=1 cellPadding=0 width="100%" 
+bgColor=#336699 borderColorLight=#006699 border=1>
+  
+ <TABLE id="table1" cellSpacing=1 cellPadding=3 width="100%" border=1>
+    </TABLE></TABLE>
+</BODY></HTML>
